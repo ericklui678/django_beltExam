@@ -69,7 +69,6 @@ class UserManager(models.Manager):
         if User.objects.filter(email=postData['email']):
             form_pw = postData['password'].encode()
             db_pw = User.objects.get(email=postData['email']).password.encode()
-            print db_pw
             # if hashed passwords do not match
             if not bcrypt.checkpw(form_pw, db_pw):
                 errors.append('Incorrect password')

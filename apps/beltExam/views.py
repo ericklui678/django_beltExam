@@ -3,8 +3,6 @@ from django.contrib import messages
 from .models import User, Product, Wishlist
 
 def index(request):
-    for user in User.objects.all():
-        print user
     return render(request, 'beltExam/index.html')
 
 def register(request):
@@ -30,7 +28,6 @@ def login(request):
         'email': request.POST['email'],
         'password': request.POST['password']
     }
-    print postData
     errors = User.objects.login(postData)
     if len(errors) == 0:
         request.session['id'] = User.objects.get(email=postData['email']).id
@@ -41,16 +38,6 @@ def login(request):
     return redirect('/')
 
 def dashboard(request):
-    print '---USERS---'
-    for user in User.objects.all():
-        print user.id, '-', user.email
-    print '---PRODUCTS---'
-    for product in Product.objects.all():
-        print product
-    print '---WISHES---'
-    for wish in Wishlist.objects.all():
-        print wish
-
     context = {
         'my_wishes': Wishlist.objects.filter(user_id=request.session['id']).order_by('-created_at'),
         'products': Product.objects.exclude(wishes__user_id=request.session['id']).order_by('-created_at'),
